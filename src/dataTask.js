@@ -1,4 +1,6 @@
-export const initialArray = [
+// Just copy - paste content to DevTools console and run
+
+const initialArray = [
   {
     id: 1,
     name: "one",
@@ -21,26 +23,16 @@ export const initialArray = [
   },
 ];
 
-export const func = (array) => {
-  const newArray = array.map((el) => {
-    const { id, name, description } = el;
-    return {
-      id: {
-        name: name,
-        description: description,
-      },
+const func = (array) => {
+  // Create blank object
+  const newObject = {};
+  // Iterate through array items and assign new key-value pairs to empty object
+  array.forEach((item, index) => {
+    newObject[array[index].id] = {
+      name: array[index].name,
+      description: array[index].description,
     };
   });
-  let newObject = { ...newArray };
-  let replacedItems = Object.keys(newObject).map((key) => {
-    const newValue = newObject[key].id || key;
-    const newKey = newObject[key].id || key;
-    console.log(newValue);
-    console.log(newKey);
-    newValue = newObject[key].id || key;
-    console.log(newValue);
-    return { [newKey]: newObject[key] };
-  });
-
   return newObject;
 };
+func(initialArray);

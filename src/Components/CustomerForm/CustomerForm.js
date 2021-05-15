@@ -5,49 +5,55 @@ import Paper from "@material-ui/core/Paper";
 import TextField from "@material-ui/core/TextField";
 import SendIcon from "@material-ui/icons/Send";
 import { makeStyles } from "@material-ui/core/styles";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik } from "formik";
 import * as Yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  form: {
     padding: theme.spacing(4),
   },
   textField: {
-    "&:first-child": {
-      marginTop: 0,
+    marginBottom: theme.spacing(3),
+    "&:last-of-type": {
+      marginBottom: 0,
+    },
+    "& p.Mui-error": {
+      position: "absolute",
+      top: "100%",
     },
   },
   formBox: {
     marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(8),
   },
   submitButton: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(4),
     width: "100%",
   },
 }));
 
 const inputFieldValues = [
   {
-    name: "name",
+    name: "Name",
     required: true,
     label: "Name",
     id: "name",
   },
   {
-    name: "age",
+    name: "Age",
     label: "Age",
     type: "number",
     id: "age",
   },
   {
-    name: "email",
+    name: "E-mail",
     required: true,
     label: "E-mail",
     type: "e-mail",
     id: "email",
   },
   {
-    name: "message",
+    name: "Message",
     label: "Message",
     id: "message",
     multiline: true,
@@ -58,11 +64,18 @@ const inputFieldValues = [
 const CustomerForm = () => {
   const classes = useStyles();
 
+  const validationSchema = Yup.object().shape({
+    Name: Yup.string().required("Required"),
+    Age: Yup.number().integer().min(1),
+    "E-mail": Yup.string().email().required("Required"),
+    Message: Yup.string(),
+  });
+
   return (
     <Container maxWidth="xs">
       <Paper className={classes.formBox}>
         <Formik
-          initialValues={{ name: "", age: "", email: "", message: "" }}
+          initialValues={{ Name: "", Age: "", "E-mail": "", Message: "" }}
           onSubmit={(values) => {
             let resultString = "";
             for (const [key, value] of Object.entries(values)) {
@@ -70,12 +83,7 @@ const CustomerForm = () => {
             }
             alert(resultString);
           }}
-          validationSchema={Yup.object().shape({
-            name: Yup.string().required("Required"),
-            age: Yup.number(),
-            email: Yup.string().email().required("Required"),
-            comment: Yup.string(),
-          })}
+          validationSchema={validationSchema}
         >
           {(props) => {
             const {
@@ -88,11 +96,7 @@ const CustomerForm = () => {
               handleSubmit,
             } = props;
             return (
-              <form
-                onSubmit={handleSubmit}
-                className={classes.root}
-                autoComplete="off"
-              >
+              <form onSubmit={handleSubmit} className={classes.form}>
                 {inputFieldValues.map((inputFieldValue, index) => {
                   return (
                     <TextField
@@ -109,9 +113,8 @@ const CustomerForm = () => {
                       autoComplete="none"
                       fullWidth
                       className={classes.textField}
-                      margin="normal"
+                      margin="dense"
                       helperText={
-                        errors[inputFieldValue.name] &&
                         touched[inputFieldValue.name] &&
                         errors[inputFieldValue.name]
                       }
@@ -131,7 +134,7 @@ const CustomerForm = () => {
                   className={classes.submitButton}
                   endIcon={<SendIcon />}
                 >
-                  Send
+                  Submit
                 </Button>
               </form>
             );

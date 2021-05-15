@@ -1,6 +1,6 @@
 # Cleveron testtöö
 
-MUI Fields with validation, "func" function in `/src/dataTask.js`
+MUI Fields with validation, tablet size orientation based responsiveness, "func" function in `/src/dataTask.js`
 
 ## Available Scripts
 
